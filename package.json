@@ -9,6 +9,7 @@
     "start": "nodemon --exec babel-node server/app.js"
   },
   "dependencies": {
+    "async": "^2.5.0",
     "body-parser": "^1.18.1",
     "express": "^4.15.4",
     "express-router": "^0.0.1",
@@ -17,7 +18,6 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",

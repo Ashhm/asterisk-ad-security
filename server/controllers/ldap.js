@@ -1,14 +1,21 @@
-import * as ldapService from '../services/ldapConnect';
+import * as ldapServices from '../services/ldapConnect';
 
-export const getUsers = async (req, res, next) => {
-    let users;
+import {ldapConfig} from '../config/config.json';
 
-    //trying to get active connection with authorization
+export const getGroupMembers = async (req, res, next) => {
+
+    let result;
+
     try {
-        users = await ldapService.getUsers();
-        console.log(users);
-        res.send(users);
+        result = await ldapServices.searchGroupMembers('SENDSMS');
     } catch (err) {
-        console.log(err);
+        console.log(err);//todo: add error handler
     }
-}
+
+    res.send(result);
+};
+
+export const setUserPassword = async (req, res, next) => {
+
+};
+
