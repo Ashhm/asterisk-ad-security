@@ -67,7 +67,8 @@ export function searchGroupMembers(groupName) {
                    reject(
                        new Error(`${groupName} is Empty or don\`t exist!`)
                    );
-                //async mapping of result array to get a modified user containers
+
+               //async mapping of result array to get a modified user containers
                asyncMap(...data, searchUser, (err, result) => {
                    if (err)
                        reject(err);

@@ -1,4 +1,4 @@
-import * as ldapServices from '../services/ldapConnect';
+import * as ldapServices from '../services/ldapServices';
 
 import {ldapConfig} from '../config/config.json';
 

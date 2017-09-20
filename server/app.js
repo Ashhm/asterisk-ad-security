@@ -3,6 +3,9 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 
 import ldapRoute from './routes/ldap';
+//import serviceRoute from './routes/asterisk';
+
+import schedule from './schedule/schedule';
 
 import {serverConfig} from './config/config.json';
 
@@ -15,6 +18,7 @@ app.use(bodyParser.urlencoded({
 app.use(morgan('dev'));
 
 app.use('/ldap', ldapRoute);
+//app.use('/service', serviceRoute);
 
 const port = serverConfig.port || 3000;
 
