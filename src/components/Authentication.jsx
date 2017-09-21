@@ -13,6 +13,7 @@ class Authentication extends React.Component {
         };
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     getValidationState() {
@@ -31,6 +32,11 @@ class Authentication extends React.Component {
         this.setState({password: e.target.value});
     }
 
+    handleSubmit(e) {
+        e.preventDefault();
+        this.props.authentication(this.state);
+    }
+
     render() {
         return (
             <div className='Auth__container container'>
@@ -38,12 +44,15 @@ class Authentication extends React.Component {
                     className='text-center'
                     header='Please enter login and password for AD authentication'
                 >
-                        <Image
-                            src='../img/active-directory-logo.png'
-                            responsive
-                            rounded
-                        />
-                    <Form horizontal>
+                    <Image
+                        src='../img/active-directory-logo.png'
+                        responsive
+                        rounded
+                    />
+                    <Form
+                        onSubmit={this.handleSubmit}
+                        horizontal
+                    >
                         <FormGroup
                             controlId='formHorizontalText'
                             validationState={this.getValidationState()}
@@ -59,6 +68,7 @@ class Authentication extends React.Component {
                                 <FormControl
                                     type='text'
                                     placeholder='Username...'
+                                    value={this.state.username}
                                     onChange={this.handleUsernameChange}
                                 />
                             </Col>
@@ -78,6 +88,7 @@ class Authentication extends React.Component {
                                 <FormControl
                                     type='password'
                                     placeholder='Password...'
+                                    value={this.state.password}
                                     onChange={this.handlePasswordChange}
                                 />
                             </Col>
