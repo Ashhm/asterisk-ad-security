@@ -1,9 +1,10 @@
 import express from 'express';
 import Router from 'express-router';
-import * as asteriskController from '../controllers/asterisk';
+
+import authController from '../controllers/auth';
 
 const router = express.Router();
 
-router.post('/sendsms', asteriskController.sendSMS);
+router.post('/signin', authController.signin);
 
 export default router;

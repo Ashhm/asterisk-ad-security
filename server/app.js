@@ -1,8 +1,11 @@
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import cors from 'cors';
+import errorHandler from './middlewares/errorHandler';
 
 import ldapRoute from './routes/ldap';
+import authRoute from './routes/auth';
 //import serviceRoute from './routes/asterisk';
 
 import schedule from './schedule/schedule';
@@ -16,10 +19,16 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(morgan('dev'));
+app.use(cors({
+    origin: '*'
+}));
 
+app.use('/auth', authRoute);
 app.use('/ldap', ldapRoute);
 //app.use('/service', serviceRoute);
 
+
+app.use(errorHandler);
 const port = serverConfig.port || 3000;
 
 const server = app.listen(port, err => {

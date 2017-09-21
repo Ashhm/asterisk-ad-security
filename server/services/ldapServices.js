@@ -7,13 +7,25 @@ const {url, username, password, baseDN} = ldapConfig;
 
 const client = ldap.createClient({url});
 
-//lets auth
-client.bind(username, password, err => {
-    if (err) {
-        client.unbind();
-        console.log(err);
-    }
-});
+//authentication function return Promise witch allow
+//us to use asyn/await
+export function clientAuth(data) {
+    const {username, password} = data;
+    //console.log(username, password);
+    return new Promise(function(resolve, reject) {
+        client.bind(username, password, err => {
+            if (err) {
+                reject(err);
+            }
+            resolve('Login success.');
+        });
+    });
+}
+
+export function clientLogout() {
+    client.unbind();
+    return 'Logout complete';
+}
 
 export function searchUser(containerName, done) {
     const options = {
