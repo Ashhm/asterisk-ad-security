@@ -8,6 +8,9 @@ module.exports = {
         filename: "bundle.js"
     },
     devtool: 'eval-source-map',
+    devServer: {
+        historyApiFallback: true
+    },
     module: {
         loaders: [
             {
