@@ -39,7 +39,7 @@ class Authentication extends React.Component {
 
     render() {
         return (
-            <div className='Auth__container container'>
+            <div className='Auth__container'>
                 <Panel
                     className='text-center'
                     header='Please enter login and password for AD authentication'
@@ -101,6 +101,7 @@ class Authentication extends React.Component {
                                 <Button
                                     type='submit'
                                     bsStyle='success'
+                                    disabled={!(this.getValidationState() === 'success')}
                                 >
                                     Sign in
                                 </Button>

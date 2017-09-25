@@ -2,16 +2,16 @@ import React from 'react';
 
 
 
-class Table extends React.Component{
+class Log extends React.Component{
     constructor(props) {
         super(props);
     }
 
     render() {
         return (
-            <div>Table</div>
+            <div>Log</div>
         );
     }
 }
 
-export default Table;
+export default Log;

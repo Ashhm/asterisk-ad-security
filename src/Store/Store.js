@@ -10,6 +10,7 @@ let _authentication = false;
 let _user = null;
 let _isError = false;
 let _isLoading = false;
+let _setting = [];
 
 
 const Store = Object.assign({}, EventEmitter.prototype, {
@@ -23,6 +24,10 @@ const Store = Object.assign({}, EventEmitter.prototype, {
 
     getUser() {
         return _user;
+    },
+
+    getSetting() {
+        return _setting;
     },
 
     eventEmitter() {
@@ -39,7 +44,7 @@ const Store = Object.assign({}, EventEmitter.prototype, {
 
 });
 
-AppDispatcher.register(function(action) {
+AppDispatcher.register(function (action) {
     switch (action.type) {
         case Constants.AUTHENTICATION_REQUEST: {
             _isLoading = true;
@@ -61,10 +66,35 @@ AppDispatcher.register(function(action) {
             Store.eventEmitter();
             break;
         }
+        case Constants.AUTHENTICATION_CLEAR: {
+            _isLoading = false;
+            _authentication = false;
+            _user = null;
+            Store.eventEmitter();
+            break;
+        }
+        case Constants.CONFIGURATION_REQUEST: {
+            _isLoading = true;
+            Store.eventEmitter();
+            break;
+        }
+        case Constants.CONFIGURATION_RECEIVED: {
+            _isLoading = false;
+            _setting = action.configuration;
+            Store.eventEmitter();
+            break;
+        }
+        case Constants.CONFIGURATION_FAIL: {
+            _isLoading = false;
+            _setting = [];
+            _isError = true;
+            Store.eventEmitter();
+            break;
+        }
         default: {
             console.info('Nothing happend');
         }
-        }
-    });
+    }
+});
 
 export default Store;

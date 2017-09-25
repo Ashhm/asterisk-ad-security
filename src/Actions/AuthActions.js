@@ -13,6 +13,7 @@ const AuthActions = {
         });
         try {
             const {body} = await Api.signin(data);
+            console.log(body);
             AppDispather.dispatch({
                 type: Constants.AUTHENTICATION_SUCCESS,
                 user: body
@@ -24,7 +25,14 @@ const AuthActions = {
             });
         }
 
+    },
+
+    signout() {
+        AppDispather.dispatch({
+            type: Constants.AUTHENTICATION_CLEAR
+        })
     }
+
 };
 
 export default AuthActions;

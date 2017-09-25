@@ -2,8 +2,8 @@ import React from 'react';
 import AuthActions from '../Actions/AuthActions';
 import Store from '../Store/Store';
 
-import Authentication from "../components/Authentication.jsx";
-import Navigation from "../components/Navbar.jsx";
+import Authentication from "../components/Authntication/Authentication.jsx";
+import Navigation from "../components/Navbar/Navbar.jsx";
 
 const getStateFromFlux = () => {
     return {
@@ -34,16 +34,22 @@ class App extends React.Component {
         this.setState(getStateFromFlux());
     }
 
-    authenticationHandler(data) {
-        console.log(data);
+    loginHandler(data) {
         AuthActions.signin(data);
     }
 
+    logoutHandler() {
+        AuthActions.signout();
+    }
+
     render() {
+        const isLoggedIn = this.state.authenticated;
+        const Main = isLoggedIn
+            ? <Navigation authentication = {this.logoutHandler}/>
+            : <Authentication authentication = {this.loginHandler}/>;
         return (
             <div>
-                <Authentication authentication={this.authenticationHandler}/>
-                <Navigation/>
+               {Main}
             </div>
         );
     }
