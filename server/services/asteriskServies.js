@@ -4,7 +4,7 @@ import {asteriskConfig} from '../config/config.json';
 
 const {host, port, username, password, span} = asteriskConfig;
 
-const sms = osms({
+const sms = new osms({
     host,
     port,
     username,
@@ -12,45 +12,42 @@ const sms = osms({
 });
 
 //listeners
-sms.on('connect', err => {
+sms.on('connect', () => {
+    sms.keepConnected();
+});
+
+sms.on('close', evt => {
+    console.log('close', evt);
+});
+
+sms.on('end', evt => {
+    console.log('end', evt);
+});
+
+sms.on('error', err => {
     console.log(err);
-});
-
-sms.on('close', function (e) {
-    console.log('close', e);
-});
-
-sms.on('end', function (e) {
-    console.log('end', e);
-});
-
-sms.on('error', function (err) {
-    console.log('error', err);
 });
 
 export const sendSMS = (data) => {
     //adding SIM card slot for sending SMS
     data.span = span;
+    return new Promise((resolve, reject) => {
+        if (!sms.isConnected()) {
+            sms.sendSMS(data, (err, response) => {
+                if (err)
+                    console.log(err);
 
-    return new Promise(function (resolve, reject) {
-        if (!sms.isConnected())
-            reject(new Error(`Asterisk interface isn\`t connected`));
+                sms.close(() => {
+                    console.log('close after sms');
 
-        sms.sendSMS(data, (err, response) => {
-            if (err)
-                reject(err);
+                    if (sms.isConnected()) {
+                        console.log('connected');
+                    } else {
+                        console.log('not connected');
+                    }
+                });
 
-            sms.close(function () {
-                console.log('close after sms');
-
-                if (sms.isConnected()) {
-                    console.log('connected');
-                } else {
-                    console.log('not connected');
-                }
-                //process.exit(0);
-            });
-
-        })
-    })  
+            })
+        }
+    })
 };

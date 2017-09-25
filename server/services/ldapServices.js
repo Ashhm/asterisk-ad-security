@@ -5,14 +5,21 @@ import {ldapConfig} from '../config/config.json';
 
 const {url, username, password, baseDN} = ldapConfig;
 
-const client = ldap.createClient({url});
+/*todo: here is no way to get an error when server is OFF
+todo: in future necessary to add some connection errHandler
+*/
+const client = ldap.createClient({url}, err => {
+    if (err) {
+        throw err;
+    }
+});
+
 
 //authentication function return Promise witch allow
 //us to use asyn/await
 export function clientAuth(data) {
     const {username, password} = data;
-    //console.log(username, password);
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
         client.bind(username, password, err => {
             if (err) {
                 reject(err);
@@ -75,17 +82,17 @@ export function searchGroupMembers(groupName) {
                 reject(err);
             });
             res.on('end', () => {
-               if (!data || data.length < 1)
-                   reject(
-                       new Error(`${groupName} is Empty or don\`t exist!`)
-                   );
+                if (!data || data.length < 1)
+                    reject(
+                        new Error(`${groupName} is Empty or don\`t exist!`)
+                    );
 
-               //async mapping of result array to get a modified user containers
-               asyncMap(...data, searchUser, (err, result) => {
-                   if (err)
-                       reject(err);
+                //async mapping of result array to get a modified user containers
+                asyncMap(...data, searchUser, (err, result) => {
+                    if (err)
+                        reject(err);
 
-                   resolve(result);
+                    resolve(result);
                 })
             })
         })

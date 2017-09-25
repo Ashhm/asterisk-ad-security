@@ -6,9 +6,10 @@ import errorHandler from './middlewares/errorHandler';
 
 import ldapRoute from './routes/ldap';
 import authRoute from './routes/auth';
-//import serviceRoute from './routes/asterisk';
+import serviceRoute from './routes/asterisk';
+import configRoute from './routes/configuraion';
 
-import schedule from './schedule/schedule';
+//import schedule from './schedule/schedule';
 
 import {serverConfig} from './config/config.json';
 
@@ -25,10 +26,12 @@ app.use(cors({
 
 app.use('/auth', authRoute);
 app.use('/ldap', ldapRoute);
-//app.use('/service', serviceRoute);
+app.use('/service', serviceRoute);
+app.use('/config', configRoute);
 
 
 app.use(errorHandler);
+
 const port = serverConfig.port || 3000;
 
 const server = app.listen(port, err => {
