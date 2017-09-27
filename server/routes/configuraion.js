@@ -4,8 +4,10 @@ import config from '../config/config.json';
 
 const router = express.Router();
 
-router.get('/get', (req, res, next)=> {
-    res.send(config[req.query.name]);
+router.get('/get', (req, res, next) => {
+  res.send(
+    req.query.name ? config[req.query.name] : config
+  )
 });
 
 export default router;

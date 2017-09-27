@@ -4,9 +4,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import errorHandler from './middlewares/errorHandler';
 
-import ldapRoute from './routes/ldap';
+//import ldapRoute from './routes/ldap';
 import authRoute from './routes/auth';
-import serviceRoute from './routes/asterisk';
+//import serviceRoute from './routes/asterisk';
 import configRoute from './routes/configuraion';
 
 //import schedule from './schedule/schedule';
@@ -17,16 +17,16 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true
 }));
 app.use(morgan('dev'));
 app.use(cors({
-    origin: '*'
+  origin: '*'
 }));
 
 app.use('/auth', authRoute);
-app.use('/ldap', ldapRoute);
-app.use('/service', serviceRoute);
+//app.use('/ldap', ldapRoute);
+//app.use('/service', serviceRoute);
 app.use('/config', configRoute);
 
 
@@ -35,8 +35,8 @@ app.use(errorHandler);
 const port = serverConfig.port || 3000;
 
 const server = app.listen(port, err => {
-    if (err)
-        throw err;
+  if (err)
+    throw err;
 
-    console.log(`Server is runing on: ${port}`);
+  console.log(`Server is runing on: ${port}`);
 });
