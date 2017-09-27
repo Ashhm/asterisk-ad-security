@@ -1,23 +1,16 @@
 import React from 'react';
-import MenuActions from '../../Actions/MenuActions';
+import Configuration from './Configuration.jsx';
 
-import {Form, FormGroup, Col, FormControl} from 'react-bootstrap';
+class Common extends React.Component {
 
-
-class Common extends React.Component{
-    constructor(props) {
-        super(props);
-    }
-
-
-
-    render() {
-        return (
-            <Form horizontal>
-
-            </Form>
-        );
-    }
+  render() {
+    return (
+      <Configuration
+        title={'General server setting'}
+        name={'serverConfig'}
+      />
+    );
+  }
 }
 
 export default Common;

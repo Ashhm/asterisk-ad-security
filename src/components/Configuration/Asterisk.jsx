@@ -1,17 +1,17 @@
 import React from 'react';
-
+import Configuration from './Configuration.jsx';
 
 
 class Asterisk extends React.Component{
-    constructor(props) {
-        super(props);
-    }
 
-    render() {
-        return (
-            <div>Asterisk</div>
-        );
-    }
+  render() {
+    return (
+      <Configuration
+        title={'Astersik setting'}
+        name={'asteriskConfig'}
+      />
+    );
+  }
 }
 
 export default Asterisk;

@@ -1,17 +1,17 @@
 import React from 'react';
-
+import Configuration from './Configuration.jsx';
 
 
 class Ldap extends React.Component{
-    constructor(props) {
-        super(props);
-    }
 
-    render() {
-        return (
-            <div>Ldap</div>
-        );
-    }
+  render() {
+    return (
+      <Configuration
+        title={'Ldap setting'}
+        name={'ldapConfig'}
+      />
+    );
+  }
 }
 
 export default Ldap;
