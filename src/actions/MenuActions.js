@@ -1,20 +1,20 @@
-import AppDispather from '../Dispatcher/AppDispatcher';
+import AppDispather from '../dispatcher/AppDispatcher';
 
-import * as Api from '../api/api';
-import Constants from '../etc/AppConstans';
+import * as Api from '../utils/AppAPI';
+import Constants from '../constants/AppConstans';
 
 
 const MenuActions = {
-    async getConfigurationSetting(name) {
+    async getConfigurationSetting() {
         AppDispather.dispatch({
             type: Constants.CONFIGURATION_REQUEST
         });
 
         try {
-            const configuration = await Api.getConfiguration(name);
+            const {body} = await Api.getConfiguration();
             AppDispather.dispatch({
                 type: Constants.CONFIGURATION_RECEIVED,
-                configuration
+                configuration: body
             })
         } catch (err) {
             AppDispather.dispatch({
