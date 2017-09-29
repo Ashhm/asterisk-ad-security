@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import compression from 'compression';
 import errorHandler from './middlewares/errorHandler';
 
 //import ldapRoute from './routes/ldap';
@@ -15,6 +16,7 @@ import {serverConfig} from './config/config.json';
 
 const app = express();
 
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
