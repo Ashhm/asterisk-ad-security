@@ -1,6 +1,6 @@
 import fse from 'fs-extra';
 import path from 'path';
-import config from '../config/config.json';
+import config from '../config/services.json';
 
 const configController = {
   readFile(req, res, next) {
@@ -12,7 +12,6 @@ const configController = {
 
   async writeFile(req, res, next) {
     const {data} = req.body;
-
     if (!data)
       return next({
         status: 400,
@@ -20,7 +19,7 @@ const configController = {
       });
 
     const rootName = path.dirname(require.main.filename || process.mainModule.filename);
-    const fileName = `${rootName}/config/config.json`;
+    const fileName = `${rootName}/config/services.json`;
 
     try {
       await fse.outputFile(fileName, data);

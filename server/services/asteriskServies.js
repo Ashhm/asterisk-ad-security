@@ -1,6 +1,6 @@
 import osms from 'openvox-sms';
 
-import {asteriskConfig} from '../config/config.json';
+import {asteriskConfig} from '../config/servicess.json';
 
 const {host, port, username, password, span} = asteriskConfig;
 

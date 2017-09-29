@@ -1,7 +1,7 @@
 import ldap from 'ldapjs';
 import asyncMap from 'async/map';
 
-import {ldapConfig} from '../config/config.json';
+import {ldapConfig} from '../config/services.json';
 
 const {url, username, password, baseDN} = ldapConfig;
 
