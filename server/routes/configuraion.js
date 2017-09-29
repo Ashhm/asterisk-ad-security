@@ -1,13 +1,10 @@
 import express from 'express';
 import Router from 'express-router';
-import config from '../config/config.json';
+import configController from '../controllers/configuration';
 
 const router = express.Router();
 
-router.get('/get', (req, res, next) => {
-  res.send(
-    req.query.name ? config[req.query.name] : config
-  )
-});
+router.get('/', configController.readFile);
+router.put('/',configController.writeFile);
 
 export default router;
