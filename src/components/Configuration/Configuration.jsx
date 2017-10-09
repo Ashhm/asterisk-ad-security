@@ -1,6 +1,7 @@
 import React from 'react';
 import Store from '../../store/AppStore';
 import ConfigItem from './ConfigItem';
+import MenuActions from '../../actions/MenuActions';
 import {ButtonToolbar, Button, Row} from 'react-bootstrap';
 
 
@@ -10,6 +11,7 @@ class Configuration extends React.Component {
     this.state = Store.getState();
     this._onChange = this._onChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
   }
 
   componentDidMount() {
@@ -30,12 +32,10 @@ class Configuration extends React.Component {
   handleChange(key, value) {
     this.setState(prevState => ({
       setting: {
-        _data: {
-          ...prevState.setting._data,
-          [this.props.name]: {
-            ...prevState.setting._data[this.props.name],
-            [key]: value
-          }
+        ...prevState.setting,
+        [this.props.name]: {
+          ...prevState.setting[this.props.name],
+          [key]: value
         }
       },
     }));
@@ -43,11 +43,12 @@ class Configuration extends React.Component {
 
   submitHandler(e) {
     e.preventDefault();
-    console.log('hi from here');
+    MenuActions.saveConfigurationSetting(this.state.setting)
   }
 
   render() {
-    const setting = this.state.setting._data[this.props.name] || {};
+    console.log(this.state);
+    const setting = this.state.setting[this.props.name] || {};
     const content = Object.keys(setting)
       .map((key, index) =>
         <ConfigItem
@@ -63,10 +64,10 @@ class Configuration extends React.Component {
         <h3>{this.props.title}</h3>
         {content}
         <Row bsClass='pull-right'>
-        <ButtonToolbar>
-          <Button bsStyle='success' type='submit' bsSize='large'>Submit</Button>
-          <Button bsSize='large'>Check</Button>
-        </ButtonToolbar>
+          <ButtonToolbar>
+            <Button bsStyle='success' type='submit' bsSize='large'>Submit</Button>
+            <Button bsSize='large'>Check</Button>
+          </ButtonToolbar>
         </Row>
       </form>
     );

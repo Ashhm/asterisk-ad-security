@@ -1,6 +1,7 @@
 import React from 'react';
 import Store from '../../store/AppStore';
 import MenuActions from "../../actions/MenuActions";
+import {Table} from 'react-bootstrap';
 
 const List = (props) => {
   return (
@@ -13,10 +14,10 @@ const List = (props) => {
       </tr>
       </thead>
       <tbody>
-      {this.props.list.map((item, index) => {
+      {props.list.map((item, index) => {
         return (
-          <tr>
-            <td>{index}</td>
+          <tr key={index}>
+            <td>{++index}</td>
             <td>{item.cn}</td>
             <td>{item.mobile}</td>
           </tr>
@@ -54,6 +55,7 @@ class ListGrid extends React.Component {
   render() {
     return (
       <div>
+        <h3>Ldap members of "{this.state.setting.ldapConfig.groupDN}" group</h3>
         <List list = {this.state.userList} />
       </div>
     );

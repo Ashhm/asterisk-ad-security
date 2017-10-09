@@ -13,9 +13,8 @@ const state = {
     _authFormLogin: '',
     _authFormPassword: ''
   },
-  setting: {
-    _data: {}
-  },
+  setting: {},
+  userList: [],
   _isError: false,
   _isLoading: false,
 
@@ -42,6 +41,7 @@ const Store = Object.assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function (action) {
+  console.log(action.type);
   switch (action.type) {
     case Constants.AUTHENTICATION_REQUEST: {
       state._isLoading = true;
@@ -77,13 +77,35 @@ AppDispatcher.register(function (action) {
     }
     case Constants.CONFIGURATION_RECEIVED: {
       state._isLoading = false;
-      state.setting._data = action.configuration;
+      state._isError = false;
+      state.setting = action.configuration;
+      Store.eventEmitter();
+      break;
+    }
+    case Constants.CONFIGURATION_SAVED: {
+      state._isLoading = false;
+      state._isError = false;
+      state.setting = action.configuration;
       Store.eventEmitter();
       break;
     }
     case Constants.CONFIGURATION_FAIL: {
       state._isLoading = false;
-      state.setting._data = {};
+      state.setting = {};
+      state._isError = true;
+      Store.eventEmitter();
+      break;
+    }
+    case Constants.USERS_RECEIVED: {
+      state._isLoading = false;
+      state._isError = false;
+      state.userList = action.userList;
+      Store.eventEmitter();
+      break;
+    }
+    case Constants.USERS_FAIL: {
+      state._isLoading = false;
+      state.userList = [];
       state._isError = true;
       Store.eventEmitter();
       break;

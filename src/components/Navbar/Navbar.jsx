@@ -8,6 +8,9 @@ import './Navbar.less';
 
 //for path props thought router i gonna use Link props
 class Navigation extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
   componentWillMount() {
     MenuActions.getConfigurationSetting();
@@ -32,8 +35,7 @@ class Navigation extends React.Component {
         <Navbar.Collapse>
           <Nav>
             <LinkContainer to={{
-              pathname:'/list',
-              props: this.props.state
+              pathname:'/list'
             }}>
               <NavItem eventKey={1} href='#'>
                 List
@@ -41,18 +43,18 @@ class Navigation extends React.Component {
             </LinkContainer>
 
             <LinkContainer to={{
-              pathname:'/log',
-              props: this.props.state
+              pathname:'/log'
             }}>
-              <NavItem eventKey={2} href='#'>
+              <NavItem
+                disabled
+                eventKey={2} href='#'>
                 Log
               </NavItem>
             </LinkContainer>
 
             <NavDropdown eventKey={3} title='Setting' id='basic-nav-dropdown'>
               <LinkContainer to={{
-                pathname:'/ldap',
-                props: this.props.state.setting._data
+                pathname:'/ldap'
               }}>
                 <MenuItem eventKey={3.1}>
                   Active directory
@@ -70,16 +72,8 @@ class Navigation extends React.Component {
               <LinkContainer to={{
                 pathname: '/schedule'
               }}>
-                <MenuItem eventKey={3.4}>
+                <MenuItem eventKey={3.3}>
                   Schedule
-                </MenuItem>
-              </LinkContainer>
-
-              <LinkContainer to={{
-                pathname: '/common'
-              }}>
-                <MenuItem eventKey={3.4}>
-                  Other
                 </MenuItem>
               </LinkContainer>
 

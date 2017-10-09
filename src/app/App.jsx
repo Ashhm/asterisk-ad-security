@@ -1,7 +1,7 @@
 import React from 'react';
 import AuthActions from '../actions/AuthActions';
 import Store from '../store/AppStore';
-import Authentication from "../components/Authntication/Authentication.jsx";
+import Authentication from "../components/Authentication/Authentication.jsx";
 import Navigation from "../components/Navbar/Navbar.jsx";
 
 
@@ -33,17 +33,14 @@ class App extends React.Component {
     return (
       <div>
         <Navigation
-          show={isLoggedIn}
+          show={!isLoggedIn}
           logOut={this.logoutHandler}
-          state={this.state}
         />
         <Authentication
-          show={!isLoggedIn}
+          show={isLoggedIn}
           authentication={this.loginHandler}
         />
-
-        {this.props.children}
-
+        {isLoggedIn ? this.props.children: null}
       </div>
     );
   }

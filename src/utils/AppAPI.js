@@ -10,10 +10,19 @@ export const signin = (data) => {
 };
 
 export const signout = () => {
-  return request.posp(`${url}/auth/signout`)
+  return request.post(`${url}/auth/signout`)
     .send({});
 };
 
-export const getConfiguration = (name) => {
-  return request.get(`${url}/config/get`);
+export const getConfiguration = () => {
+  return request.get(`${url}/config`);
+};
+
+export const saveConfiguration = (data) => {
+  return request.put(`${url}/config`).send(data);
+};
+
+export const getLdapUsers = () => {
+  console.log('request');
+  return request.get(`${url}/ldap/users`);
 };

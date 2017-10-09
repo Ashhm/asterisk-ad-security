@@ -10,7 +10,6 @@ class ConfigItem extends React.Component {
 
 
   handleChange(e) {
-    console.log(e.target);
     this.props.changeValue(this.props.label, e.target.value)
   }
 

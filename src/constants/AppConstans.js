@@ -9,5 +9,10 @@ export default keymirror({
   "CONFIGURATION_REQUEST": null,
   "CONFIGURATION_RECEIVED": null,
   "CONFIGURATION_SAVED": null,
-  "CONFIGURATION_FAIL": null
+  "CONFIGURATION_FAIL": null,
+
+  "USERS_REQUEST": null,
+  "USERS_RECEIVED": null,
+  "USERS_SAVED": null,
+  "USERS_FAIL": null
 });
