@@ -5,10 +5,10 @@ import cors from 'cors';
 import compression from 'compression';
 import errorHandler from './middlewares/errorHandler';
 
-//import ldapRoute from './routes/ldap';
+import ldapRoute from './routes/ldap';
 import authRoute from './routes/auth';
 //import serviceRoute from './routes/asterisk';
-import configRoute from './routes/configuraion';
+import configRoute from './routes/configuration';
 
 //import schedule from './schedule/schedule';
 
@@ -27,11 +27,11 @@ app.use(cors({
 }));
 
 app.use('/auth', authRoute);
-//app.use('/ldap', ldapRoute);
+app.use('/ldap', ldapRoute);
 //app.use('/service', serviceRoute);
 app.use('/config', configRoute);
 
-
+//error handler
 app.use(errorHandler);
 
 const port = serverConfig.port || 3000;

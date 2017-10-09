@@ -1,5 +1,4 @@
 import express from 'express';
-import Router from 'express-router';
 import * as ldapController from '../controllers/ldap';
 
 const router = express.Router();

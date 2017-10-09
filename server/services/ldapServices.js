@@ -3,48 +3,73 @@ import asyncMap from 'async/map';
 
 import {ldapConfig} from '../config/services.json';
 
-const {url, username, password, baseDN} = ldapConfig;
+let client = null;
 
-let client = ldap.createClient({url}, err => {
-  if (err) {
-    throw err;
-  }
-});
-
-
-//authentication function return Promise witch allow
-//us to use asyn/await
-export function clientAuth(data) {
-  const {username, password} = data;
-
-  //fixed connect bug
-  if(!client.connected) {
-    client.unbind(err => {
-      if(err)
-        return err;
-    });
-    client = ldap.createClient({url}, err=> {
-      if(err)
-        return err;
-    })
-  }
+//need to check connection setup
+function connectionHandler() {
+  const {url} = ldapConfig;
 
   return new Promise((resolve, reject) => {
+    if (client) {
+      if (client.connected) {
+        resolve('Connection established');
+      } else {
+        client.unbind(err => {
+          if (err)
+            reject(err);
+        });
+      }
+    }
+
+    client = ldap.createClient({url}, err => {
+      reject(err);
+    });
+
+    client.on('connect', () => {
+      resolve('Connection established');
+    });
+  })
+}
+
+//binding client to specific username/password
+//for schedule - take credentials from config
+export async function clientAuth(data) {
+  let connectionErr = null;
+  //first of all need to check connection!
+  try {
+    await connectionHandler();
+  } catch (err) {
+    connectionErr = err;
+  }
+
+  const {username, password} = data;
+  return new Promise((resolve, reject) => {
+    if(!username||!password) {
+      reject(new Error('Missing authentication data!'));
+    }
+    if (connectionErr)
+      reject(connectionErr);
+
     client.bind(username, password, err => {
       if (err) {
         reject(err);
       }
-      resolve(data);
+      resolve({username});
     });
-  });
+  })
 }
 
 export function searchUser(containerName, done) {
+
   const options = {
     scope: 'sub',
     attributes: ['cn', 'mobile']
   };
+
   return new Promise((resolve, reject) => {
+    if(!client.connected) {
+      reject(new Error('Connection lost!'));
+    }
     client.search(containerName, options, (err, res) => {
       if (err)
         reject(err);
@@ -66,14 +91,20 @@ export function searchUser(containerName, done) {
   })
 }
 
-export function searchGroupMembers(groupName) {
+//excluded attributes and scope from config
+export function searchGroupMembers() {
+  const {baseDN, groupDN} = ldapConfig;
+
   const options = {
-    filter: (`cn=${groupName}`),
+    filter: (`cn=${groupDN}`),
     scope: 'sub',
     attributes: 'member'
   };
 
   return new Promise((resolve, reject) => {
+    if(!client.connected) {
+      reject(new Error('Connection lost!'));
+    }
     client.search(baseDN, options, (err, res) => {
       if (err)
         reject(err);

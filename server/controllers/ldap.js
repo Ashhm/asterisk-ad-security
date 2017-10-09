@@ -1,18 +1,20 @@
 import * as ldapServices from '../services/ldapServices';
 
-import {ldapConfig} from '../config/config.json';
-
 export const getGroupMembers = async (req, res, next) => {
 
-    let result;
+  let result = null;
 
-    try {
-        result = await ldapServices.searchGroupMembers('SENDSMS');
-    } catch (err) {
-        console.log(err);//todo: add error handler
-    }
+  try {
+    result = await ldapServices.searchGroupMembers();
+    console.log(result);
+  } catch ({message}) {
+    return next({
+      status: 500,
+      message
+    });
+  }
 
-    res.send(result);
+  res.send(result);
 };
 
 export const setUserPassword = async (req, res, next) => {
