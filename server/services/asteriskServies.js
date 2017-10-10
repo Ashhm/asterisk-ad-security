@@ -1,53 +1,54 @@
 import osms from 'openvox-sms';
 
-import {asteriskConfig} from '../config/servicess.json';
+import {asteriskConfig} from '../config/services.json';
 
-const {host, port, username, password, span} = asteriskConfig;
+//connection handler. some why new OSMS options need !!!secret!!! option
+//instead password
+function connectionHandler() {
+  const {host, port, username, password} = asteriskConfig;
 
-const sms = new osms({
+  const sms = new osms({
     host,
     port,
     username,
-    password
-});
+    secret: password
+  });
 
-//listeners
-sms.on('connect', () => {
-    sms.keepConnected();
-});
-
-sms.on('close', evt => {
-    console.log('close', evt);
-});
-
-sms.on('end', evt => {
-    console.log('end', evt);
-});
-
-sms.on('error', err => {
-    console.log(err);
-});
+  return new Promise((resolve, reject) => {
+    sms.on('connect', () => {
+      resolve(sms);
+    });
+    sms.on('error', err => {
+      reject(err);
+    });
+  });
+}
 
 export const sendSMS = (data) => {
-    //adding SIM card slot for sending SMS
-    data.span = span;
-    return new Promise((resolve, reject) => {
-        if (!sms.isConnected()) {
-            sms.sendSMS(data, (err, response) => {
-                if (err)
-                    console.log(err);
+  const {span} = asteriskConfig;
+  data.span = span;
+  return new Promise(async (resolve, reject) => {
+    let client = null;
 
-                sms.close(() => {
-                    console.log('close after sms');
+    try {
+      client = await connectionHandler();
+    } catch (err) {
+      reject(err);
+    }
 
-                    if (sms.isConnected()) {
-                        console.log('connected');
-                    } else {
-                        console.log('not connected');
-                    }
-                });
+    if (!client)
+      reject(new Error('Asterisk client is null!'));
 
-            })
-        }
-    })
+    if (!client.isConnected())
+      reject(new Error('Asterisk client is exist but not connected!'));
+
+    client.sendSMS(data, (err, res) => {
+      if (err) {
+        reject(err);
+      }
+      client.close(()=> {
+        resolve('SMS has been send');
+      });
+    });
+  })
 };
