@@ -10,7 +10,7 @@ import authRoute from './routes/auth';
 import serviceRoute from './routes/asterisk';
 import configRoute from './routes/configuration';
 
-//import schedule from './schedule/schedule';
+import schedule from './schedule/schedule';
 
 import {serverConfig} from './config/config.json';
 

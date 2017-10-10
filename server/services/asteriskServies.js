@@ -1,4 +1,5 @@
 import osms from 'openvox-sms';
+import asyncForEach from 'async/each';
 
 import {asteriskConfig} from '../config/services.json';
 
@@ -26,7 +27,7 @@ function connectionHandler() {
 
 export const sendSMS = (data) => {
   const {span} = asteriskConfig;
-  data.span = span;
+
   return new Promise(async (resolve, reject) => {
     let client = null;
 
@@ -42,13 +43,19 @@ export const sendSMS = (data) => {
     if (!client.isConnected())
       reject(new Error('Asterisk client is exist but not connected!'));
 
-    client.sendSMS(data, (err, res) => {
-      if (err) {
-        reject(err);
-      }
-      client.close(()=> {
-        resolve('SMS has been send');
-      });
+    const sendSMS = (data) => {
+      data.span = span;
+      client.sendSMS(data);
+      return;
+    };
+
+    asyncForEach(data, sendSMS, err => {
+      if (err)
+        console.log(err);
+      console.log(`smsSend`)
+      resolve();
     });
-  })
+
+  });
 };
+
