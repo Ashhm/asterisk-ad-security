@@ -47,7 +47,7 @@ class Authentication extends React.Component {
           header='Please enter login and password for AD authentication'
         >
           <Image
-            src='../img/active-directory-logo.png'
+            src='./img/active-directory-logo.png'
             responsive
             rounded
           />

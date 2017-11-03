@@ -12,7 +12,7 @@ class Navigation extends React.Component {
     super(props);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     MenuActions.getConfigurationSetting();
   }
 

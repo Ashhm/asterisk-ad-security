@@ -19,17 +19,32 @@ const job = schedule.scheduleJob(scheduleConfig, async function () {
   await ldapServices.clientAuth({username, password});
   const result = await ldapServices.searchGroupMembers();
 
+  const users = result.map(current => {
+    return {
+      name: current.cn,
+      container: current.dn,
+      mobile: current.mobile,
+      password: pwdGenerator()
+    };
+  });
   //reducing array of users
   //dropping users w/o mobile number!!!
-  const data = result.reduce((users, current) => {
-    return users.concat(current.mobile ?
+  const data = users.reduce((messages, current) => {
+    return messages.concat(current.mobile ?
       {
-        text: `Добрый день, ${current.cn}. Ваш новый пароль для входа ${pwdGenerator()}`,
+        text: `Добрый день, ${current.name}. Ваш новый пароль для входа ${current.password}`,
         number: current.mobile
       } : [])
   }, []);
 
-  await asteriskServices.sendSMS(data);
+  //if! password change return with error no sms change should fire
+  try {
+    await ldapServices.changePassword(users);
+    await asteriskServices.sendSMS(data);
+  } catch (err) {
+    console.error(err);
+  }
+
 });
 
 export default job;

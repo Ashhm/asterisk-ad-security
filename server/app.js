@@ -40,5 +40,5 @@ const server = app.listen(port, err => {
   if (err)
     throw err;
 
-  console.log(`Server is runing on: ${port}`);
+  console.log(`Server is running on: ${port}`);
 });

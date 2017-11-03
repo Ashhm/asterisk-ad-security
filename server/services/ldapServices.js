@@ -1,5 +1,6 @@
 import ldap from 'ldapjs';
 import asyncMap from 'async/map';
+import asyncEach from 'async/each';
 
 import {ldapConfig} from '../config/services.json';
 
@@ -29,6 +30,38 @@ function connectionHandler() {
       resolve('Connection established');
     });
   })
+}
+
+//changing pass function
+function modifyPassword(user, done) {
+  const encodePassword = password => {
+    const newPass = [].__proto__.reduce.call(password, (acum, letter) => {
+      return acum += String.fromCharCode(letter & 0xFF, (letter >>> 8) & 0xFF);
+    }, '');
+    return newPass;
+  };
+
+  return new Promise((resolve, reject) => {
+    if(!client.connected) {
+      reject(new Error('Connection lost!'));
+    }
+    client.modify(user.container,
+      new ldap.Change({
+        operation: 'replace',
+        modification: {
+          unicodePwd: encodePassword(user.password)
+        }
+      })
+      , err => {
+        if (err) {
+          reject(err);
+        }
+        else {
+          resolve();
+          done();
+        }
+      });
+  });
 }
 
 //binding client to specific username/password
@@ -134,4 +167,23 @@ export function searchGroupMembers() {
     })
   })
 
+}
+
+//changing password also require async operation. asyncEach fires on!
+export function changePassword (userList) {
+  const options = {
+    scope: 'sub',
+    attributes: 'member'
+  };
+
+  return new Promise((resolve, reject) => {
+    if(!client.connected) {
+      reject(new Error('Connection lost!'));
+    }
+    asyncEach(userList, modifyPassword, (err, result) => {
+      if(err)
+        reject(err);
+      resolve(result);
+    });
+  });
 }
